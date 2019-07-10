@@ -2,9 +2,25 @@
 
 #include "util/download.c"
 
+char *getStringTime() {
+    char *date;//YYYYMMDDhhmmss
+    date = (char *) malloc(10);
+
+    time_t aclock;
+    time(&aclock);
+    strftime(date, 15, "%H%M%S", localtime(&aclock));
+    printf("%s\n", date);
+
+    return date;
+}
+
 int main() {
     printf("Hello, World!\n");
-    url2file("https://dldir1.qq.com/qqfile/QQIntl/QQi_PC/QQIntl2.11.exe", "qq.exe");
+
+    char filename[23];
+    sprintf(filename, "wc_%s.exe", getStringTime());
+    url2file("https://dldir1.qq.com/weixin/Windows/WeChat_C1018.exe", filename);
     printf("Hello, World!\n");
     return 0;
 }
+
