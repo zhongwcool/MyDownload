@@ -38,7 +38,6 @@ CURLoption option, ...
 CURL_EXTERN CURLcode
 curl_easy_perform(CURL
 *curl);
-
 CURL_EXTERN void curl_easy_cleanup(CURL *curl);
 
 /*

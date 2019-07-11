@@ -80,15 +80,11 @@
 #endif
 
 #if !defined(WIN32) && !defined(_WIN32_WCE)
-
 #include <sys/socket.h>
-
 #endif
 
 #if !defined(WIN32) && !defined(__WATCOMC__) && !defined(__VXWORKS__)
-
 #include <sys/time.h>
-
 #endif
 
 #ifdef __BEOS__
@@ -359,7 +355,6 @@ typedef int (*curl_fnmatch_callback)(void *ptr,
 #define CURL_SEEKFUNC_FAIL     1 /* fail the entire transfer */
 #define CURL_SEEKFUNC_CANTSEEK 2 /* tell libcurl seeking can't be done, so
                                     libcurl might try other means instead */
-
 typedef int (*curl_seek_callback)(void *instream,
                                   curl_off_t offset,
                                   int origin); /* 'whence' */
@@ -439,7 +434,6 @@ typedef curlioerr (*curl_ioctl_callback)(CURL *handle,
                                          void *clientp);
 
 #ifndef CURL_DID_MEMORY_FUNC_TYPEDEFS
-
 /*
  * The following typedef's are signatures of malloc, free, realloc, strdup and
  * calloc respectively.  Function pointers of these types can be passed to the
@@ -447,13 +441,9 @@ typedef curlioerr (*curl_ioctl_callback)(CURL *handle,
  * callback routines.
  */
 typedef void *(*curl_malloc_callback)(size_t size);
-
 typedef void (*curl_free_callback)(void *ptr);
-
 typedef void *(*curl_realloc_callback)(void *ptr, size_t size);
-
 typedef char *(*curl_strdup_callback)(const char *str);
-
 typedef void *(*curl_calloc_callback)(size_t nmemb, size_t size);
 
 #define CURL_DID_MEMORY_FUNC_TYPEDEFS
@@ -2088,7 +2078,6 @@ typedef enum {
 /* curl_strequal() and curl_strnequal() are subject for removal in a future
    release */
 CURL_EXTERN int curl_strequal(const char *s1, const char *s2);
-
 CURL_EXTERN int curl_strnequal(const char *s1, const char *s2, size_t n);
 
 /* Mime/form handling support. */
@@ -2686,7 +2675,6 @@ typedef void (*curl_lock_function)(CURL *handle,
                                    curl_lock_data data,
                                    curl_lock_access locktype,
                                    void *userptr);
-
 typedef void (*curl_unlock_function)(CURL *handle,
                                      curl_lock_data data,
                                      void *userptr);
@@ -2714,9 +2702,7 @@ typedef enum {
 } CURLSHoption;
 
 CURL_EXTERN CURLSH *curl_share_init(void);
-
 CURL_EXTERN CURLSHcode curl_share_setopt(CURLSH *, CURLSHoption option, ...);
-
 CURL_EXTERN CURLSHcode curl_share_cleanup(CURLSH *);
 
 /****************************************************************************
@@ -2870,9 +2856,7 @@ CURL_EXTERN CURLcode curl_easy_pause(CURL *handle, int bitmask);
 #if defined(__GNUC__) && defined(__GNUC_MINOR__) && \
     ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)) && \
     !defined(__cplusplus) && !defined(CURL_DISABLE_TYPECHECK)
-
 #include "typecheck-gcc.h"
-
 #else
 #if defined(__STDC__) && (__STDC__ >= 1)
 /* This preprocessor magic that replaces a call with the exact same call is
