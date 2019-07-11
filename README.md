@@ -6,23 +6,23 @@
 
 #### Installation of CURL
 
-#####1. 下载CURL源码
+1. 下载CURL源码
 ```shell
 git clone https://github.com/curl/curl.git
 ```
-#####2. 执行configure脚本
+2. 执行configure脚本
 
 进入解压后的CURL根目录，执行：
 ```shell
 ./configure –enable-debug
 ```
-#####3. 执行make
+3. 执行make
 
 ```shell
 make
 ```
 
-#####4. 执行make install
+4. 执行make install
 
 ```shell
 sudo make install
