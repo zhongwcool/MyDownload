@@ -1,26 +1,12 @@
 #include <stdio.h>
 
 #include "util/download.c"
-
-char *getStringTime() {
-    char *date;//YYYYMMDDhhmmss
-    date = (char *) malloc(10);
-
-    time_t aclock;
-    time(&aclock);
-    strftime(date, 15, "%H%M%S", localtime(&aclock));
-    printf("%s\n", date);
-
-    return date;
-}
+#include "util/time_util.h"
 
 int main() {
-    printf("Hello, World!\n");
-
-    char filename[23];
-    sprintf(filename, "wc_%s.exe", getStringTime());
-    url2file("https://dldir1.qq.com/weixin/Windows/WeChat_C1018.exe", filename);
-    printf("Hello, World!\n");
+    printf("Download START: %s\n", getStringTime());
+    url2file("https://dldir1.qq.com/weixin/Windows/WeChat_C1018.exe", "WeChat.exe");
+    printf("Download END  : %s\n", getStringTime());
     return 0;
 }
 
