@@ -45,6 +45,7 @@
 
 char *progress_data_tag = "[progress]";
 const char *PATH_DOWNLOAD = "file";
+int last_progress = 0;
 
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
     size_t written = fwrite(ptr, size, nmemb, (FILE *) stream);
@@ -53,7 +54,11 @@ static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
 
 int my_progress_func(char *progress_data, double dltotal, double dlnow, double ultotal, double ulnow) {
     int radius = (int) (100.0 * dlnow / dltotal);
-    if (radius > 0) printf("%s *************************** %d%%\n", progress_data, radius);
+    if (last_progress != radius & radius > 0) {
+        printf("%s *************************** %d%%\n", progress_data, radius);
+        last_progress = radius;
+    }
+
     return 0;
 }
 
