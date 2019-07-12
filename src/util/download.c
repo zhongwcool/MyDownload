@@ -41,11 +41,20 @@
 
 #include <curl/curl.h>
 #include <stdbool.h>
+#include <sys/stat.h>
 
+char *progress_data_tag = "[progress]";
+const char *PATH_DOWNLOAD = "file";
 
 static size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
     size_t written = fwrite(ptr, size, nmemb, (FILE *) stream);
     return written;
+}
+
+int my_progress_func(char *progress_data, double dltotal, double dlnow, double ultotal, double ulnow) {
+    int radius = (int) (100.0 * dlnow / dltotal);
+    if (radius > 0) printf("%s *************************** %d%%\n", progress_data, radius);
+    return 0;
 }
 
 // 保存URL文件内容到文件
@@ -55,19 +64,28 @@ bool url2file(const char *web_url, const char *filename) {
 
     curl_global_init(CURL_GLOBAL_ALL);
 
-    /// init the curl session  初始化cURL协议
+    /// init the curl session
+    /// 初始化cURL协议
     curl_handle = curl_easy_init();
 
-    /// set URL to get here   设置URL到这里
+    /// set URL to get here
+    /// 设置URL到这里
     curl_easy_setopt(curl_handle, CURLOPT_URL, web_url);
 
-    /// Switch on full protocol/debug output while testing  测试时开启完整的协议/调试输出
-    curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 0L);
+    /// Switch on full protocol/debug output while testing
+    /// 测试时开启完整的协议/调试输出
+    curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, false);
 
-    /// disable progress meter, set to 0L to enable and disable debug output   禁用进度表，设置为0L启用和禁用调试输出
-    curl_easy_setopt(curl_handle, CURLOPT_NOPROGRESS, 1L);
+    /// disable progress meter, set to 0L to enable and disable debug output
+    /// 禁用进度表，设置为0L启用和禁用调试输出
+    curl_easy_setopt(curl_handle, CURLOPT_NOPROGRESS, false);
 
-    /// send all data to this function  所有数据发送给这个函数
+    /// 进度信息
+    curl_easy_setopt(curl_handle, CURLOPT_PROGRESSFUNCTION, my_progress_func);
+    curl_easy_setopt(curl_handle, CURLOPT_PROGRESSDATA, progress_data_tag);
+
+    /// send all data to this function
+    /// 所有数据发送给这个函数
     curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
 
 #ifdef SKIP_PEER_VERIFICATION
@@ -94,22 +112,30 @@ bool url2file(const char *web_url, const char *filename) {
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
 #endif
 
-    /// open the file   写文件到结果文件
+    /// open the file
+    /// 写文件到结果文件
+    mkdir(PATH_DOWNLOAD, 0777);
     saveFile = fopen(filename, "wb");
     if (saveFile) {
-
-        /// write the page body to this file handle  写页面文件到保存文件句柄
+        /// write the page body to this file handle
+        /// 写页面文件到保存文件句柄
         curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, saveFile);
 
         /* Perform the request, res will get the return code */
         CURLcode res = curl_easy_perform(curl_handle);
 
         /* Check for errors */
-        if (res != CURLE_OK)
+        if (res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+            printf("download failed: %s\n", curl_easy_strerror(res));
+        } else {
+            printf("download successful.\n");
+        }
 
         /* close the header file */
         fclose(saveFile);
+    } else {
+        printf("cannot open the file: %s \n", filename);
     }
 
     /* always cleanup */

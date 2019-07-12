@@ -7,14 +7,14 @@ set(CMAKE_C_STANDARD 99)
 
 #link_directories(lib)
 
-add_executable(jsupdate
+add_executable(jsdownload
         src/main.c
         #src/example/10-at-a-time.c
         src/util/time_util.c
         src/util/time_util.h
         )
 
-target_link_libraries(jsupdate
+target_link_libraries(jsdownload
         #util/download.c
         libcurl.so
         )
